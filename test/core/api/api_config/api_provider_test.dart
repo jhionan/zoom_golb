@@ -31,15 +31,23 @@ main() {
         config,
         isA<ApiConfigModel>().having((apiConfig) => apiConfig.baseNews,
             'base news url', 'https://gb-mobile-app-teste.s3.amazonaws.com/'));
-  });
-
-  testWidgets('create BaseApi', (tester) async {
-    final container = ProviderContainer();
 
     BaseApi _api = await container.read(apiProvider.future);
+
     expect(
         _api,
         isA<BaseApi>().having((baseApi) => baseApi.instance,
             'Instance of dio must not be null', isNotNull));
   }, timeout: Timeout(Duration(minutes: 1)));
+
+  // testWidgets('create BaseApi', (tester) async {
+  //   final container = ProviderContainer();
+
+  //   BaseApi _api = await container.read(apiProvider.future);
+
+  //   expect(
+  //       _api,
+  //       isA<BaseApi>().having((baseApi) => baseApi.instance,
+  //           'Instance of dio must not be null', isNotNull));
+  // }, timeout: Timeout(Duration(minutes: 1)));
 }
