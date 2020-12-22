@@ -6,7 +6,7 @@ part 'api_config_model.g.dart';
 class ApiConfigModel {
   String baseNews;
   String baseDummy;
-  @JsonKey(name: "api-id")
+  @JsonKey(name: "app-id")
   String appId;
   ApiConfigModel({
     this.baseNews,

@@ -16,8 +16,13 @@ main() {
 
     expect(
         ApiConfigModel.fromJson(jsonDecode(apiConfigJson)),
-        isA<ApiConfigModel>().having((apiConfig) => apiConfig.baseNews,
-            'base news url', 'https://gb-mobile-app-teste.s3.amazonaws.com/'));
+        isA<ApiConfigModel>()
+            .having((apiConfig) => apiConfig.baseNews, 'base news url',
+                'https://gb-mobile-app-teste.s3.amazonaws.com/')
+            .having((apiConfig) => apiConfig.baseDummy, 'dummy base api',
+                'https://dummyapi.io/data/api/')
+            .having((apiConfig) => apiConfig.appId, 'app-id',
+                '5fe109855491ba26df85ad3c'));
   });
   testWidgets('create ApiConfig from json asset', (tester) async {
     final container = ProviderContainer();
@@ -30,10 +35,11 @@ main() {
 
   testWidgets('create BaseApi', (tester) async {
     final container = ProviderContainer();
+
     BaseApi _api = await container.read(apiProvider.future);
     expect(
         _api,
         isA<BaseApi>().having((baseApi) => baseApi.instance,
             'Instance of dio must not be null', isNotNull));
-  });
+  }, timeout: Timeout(Duration(minutes: 1)));
 }
