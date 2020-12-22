@@ -1,0 +1,5 @@
+{
+    "base_news" : "https://gb-mobile-app-teste.s3.amazonaws.com/",
+    "base_dummy" : "https://dummyapi.io/data/api/",
+    "app-id" : "5fe109855491ba26df85ad3c" 
+}
