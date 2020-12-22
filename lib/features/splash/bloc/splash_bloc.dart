@@ -7,12 +7,20 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
   final SplashDatasource _datasource;
   SplashBloc({
     @required SplashDatasource datasource,
-  }) : this._datasource = datasource;
+  }) : this._datasource = datasource {
+    _initAppDependences();
+  }
   @override
   onData(SplashEvent event) {
     // TODO: implement onData
     throw UnimplementedError();
   }
 
-  _initAppDependences() {}
+  _initAppDependences() {
+    _datasource.init().listen((event) {
+      print('Loaded app $event');
+    }, onError: _onError);
+  }
+
+  _onError(Object error, StackTrace stack) {}
 }
