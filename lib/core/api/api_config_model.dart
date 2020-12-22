@@ -15,6 +15,6 @@ class ApiConfigModel {
   });
 
   factory ApiConfigModel.fromJson(Map<String, Object> json) =>
-  _$ApiConfigModelFromJson(json);
+      _$ApiConfigModelFromJson(json);
   Map<String, Object> toJson() => _$ApiConfigModelToJson(this);
 }

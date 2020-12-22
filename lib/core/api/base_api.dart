@@ -22,6 +22,4 @@ class BaseApi {
   Dio get instance => _dio;
 }
 
-mixin Api {
-  
-}
+mixin Api {}
