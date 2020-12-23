@@ -9,10 +9,8 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer(
-      child: MaterialApp(
-        onGenerateRoute: AppRoutes.onGenerateRoute,
-      ),
+    return MaterialApp(
+      onGenerateRoute: AppRoutes.onGenerateRoute,
     );
   }
 }
