@@ -6,12 +6,12 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-TextEditingController _emailController;
-TextEditingController _passwordController;
-FocusNode _emailFocusNode;
-FocusNode _passwordFocusNode;
+  TextEditingController _emailController;
+  TextEditingController _passwordController;
+  FocusNode _emailFocusNode;
+  FocusNode _passwordFocusNode;
 
-@override
+  @override
   void initState() {
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
@@ -29,15 +29,10 @@ FocusNode _passwordFocusNode;
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          
-        ]
-      ),
+      body: Column(children: []),
     );
   }
 }

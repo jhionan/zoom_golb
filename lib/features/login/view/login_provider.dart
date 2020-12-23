@@ -1,6 +1,3 @@
 class LoginProvider {
   LoginProvider._();
-
-  
-
 }
