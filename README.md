@@ -1,4 +1,4 @@
-# zoom_golb
+# zoom_golb ![Flutter CI](https://github.com/jhionan/zoom_golb/workflows/Flutter%20CI/badge.svg)
 
 Perfect fragrances usually come in small bottles
 
