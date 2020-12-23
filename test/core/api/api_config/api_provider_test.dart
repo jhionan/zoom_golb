@@ -26,13 +26,14 @@ main() {
   });
   testWidgets('create ApiConfig from json asset', (tester) async {
     final container = ProviderContainer();
-    ApiConfigModel config = await container.read(apiConfigProvider.future);
+    ApiConfigModel config =
+        await container.read(ApiProvider.apiConfigProvider.future);
     expect(
         config,
         isA<ApiConfigModel>().having((apiConfig) => apiConfig.baseNews,
             'base news url', 'https://gb-mobile-app-teste.s3.amazonaws.com/'));
 
-    BaseApi _api = await container.read(apiProvider.future);
+    BaseApi _api = await container.read(ApiProvider.apiProvider.future);
 
     expect(
         _api,
