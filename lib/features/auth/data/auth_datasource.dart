@@ -15,14 +15,16 @@ class AuthDataSource {
         return UserModel(
             email: event.email,
             name: event.displayName,
-            photoURL: event.photoURL);
+            profilePicture: event.photoURL);
       } else {
         throw 'Unknow Error';
       }
     });
   }
 
-  Stream registerWithEmailAndPassword(String email, String password) async* {
+  Stream<UserModel> registerWithEmailAndPassword(
+      String email, String password) async* {
+    print('called');
     yield* _authApi
         .registerWithEmail(email: email, password: password)
         .map((event) {
@@ -30,7 +32,7 @@ class AuthDataSource {
         return UserModel(
             email: event.email,
             name: event.displayName,
-            photoURL: event.photoURL);
+            profilePicture: event.photoURL);
       } else {
         throw 'Unknow Error';
       }

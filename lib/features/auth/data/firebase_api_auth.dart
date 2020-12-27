@@ -21,7 +21,7 @@ class FirebaseApiAuth implements AuthApi {
             .signInWithEmailAndPassword(email: email, password: password)
             .asStream(),
         _firebaseAuth.authStateChanges(),
-        (a, b) => b);
+        (_, user) => user);
   }
 
   @override
@@ -31,7 +31,7 @@ class FirebaseApiAuth implements AuthApi {
   }
 
   @override
-  Stream registerWithEmail({String email, String password}) async* {
+  Stream<fire.User> registerWithEmail({String email, String password}) async* {
     yield* Rx.combineLatest2<fire.UserCredential, fire.User, fire.User>(
         _firebaseAuth
             .createUserWithEmailAndPassword(email: email, password: password)

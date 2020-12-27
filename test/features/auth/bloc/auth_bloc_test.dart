@@ -22,23 +22,30 @@ class FirebaseFakeUser extends Fake implements User {
   String get photoURL => null;
 }
 
-class SucessMock extends Fake {
-  void success() {}
-}
-
 main() {
   group('Bloc Tests', () {
-    AuthDatasourceMock dataSourceMocked = AuthDatasourceMock();
-    when(dataSourceMocked.loginWithEmailAndPassword(any, any)).thenAnswer(
-        (value) => Stream.value(UserModel(
-            email: 'teste@teste.com', name: 'teste', profilePicture: null)));
+    AuthDatasourceMock dataSourceMocked;
+    AuthBloc authBloc;
 
-    when(dataSourceMocked.registerWithEmailAndPassword(
-            'teste@teste.com', '123'))
-        .thenAnswer((value) => Stream.value(UserModel(
-            email: 'teste@teste.com', name: 'teste', profilePicture: null)));
+    setUp(() {
+      dataSourceMocked = AuthDatasourceMock();
+      when(dataSourceMocked.loginWithEmailAndPassword(any, any)).thenAnswer(
+          (value) => Stream.value(UserModel(
+              email: 'teste@teste.com', name: 'teste', profilePicture: null)));
 
-    AuthBloc authBloc = AuthBloc(dataSourceMocked);
+      when(dataSourceMocked.registerWithEmailAndPassword(
+              'teste@teste.com', '123123'))
+          .thenAnswer((value) => Stream.value(UserModel(
+              email: 'teste@teste.com', name: 'teste', profilePicture: null)));
+
+      authBloc = AuthBloc(dataSourceMocked);
+    });
+
+    tearDown(() {
+      authBloc.dispose();
+      authBloc = null;
+      dataSourceMocked = null;
+    });
 
     test('login with email and password', () async {
       int successCalled = 0;
@@ -61,21 +68,6 @@ main() {
 
       await Future.microtask(() {}); // wait until the dart event loop complete
       expect(successCalled, 1);
-    });
-
-    test('toggle obscure', () async {
-      bool obscure = true;
-      expectLater(
-          authBloc.event$,
-          emitsInOrder([
-            isA<AuthState>().having(
-                (state) => state.obscurePassword, 'obscure = false', false),
-            isA<AuthState>().having(
-                (state) => state.obscurePassword, 'obscure = true', true),
-          ]));
-      authBloc.inEvent.add(AuthEventToggleObscure(!obscure));
-      await Future.microtask(() {});
-      authBloc.inEvent.add(AuthEventToggleObscure(obscure));
     });
 
     test('register with email and password', () async {
@@ -101,17 +93,41 @@ main() {
       await Future.microtask(() {}); // wait until the dart event loop complete
       expect(successCalled, 1);
     });
+
+    test('toggle obscure', () async {
+      bool obscure = true;
+      expectLater(
+          authBloc.event$,
+          emitsInOrder([
+            isA<AuthState>().having(
+                (state) => state.obscurePassword, 'obscure = false', false),
+            isA<AuthState>().having(
+                (state) => state.obscurePassword, 'obscure = true', true),
+          ]));
+      authBloc.inEvent.add(AuthEventToggleObscure(!obscure));
+      await Future.microtask(() {});
+      authBloc.inEvent.add(AuthEventToggleObscure(obscure));
+    });
   });
 
   group('Datasource', () {
-    AuthApiMock authApiMock = AuthApiMock();
-    when(authApiMock.loginWithEmail(
-            email: anyNamed('email'), password: anyNamed('password')))
-        .thenAnswer((value) => Stream.value(FirebaseFakeUser()));
-    when(authApiMock.registerWithEmail(
-            email: anyNamed('email'), password: anyNamed('password')))
-        .thenAnswer((value) => Stream.value(FirebaseFakeUser()));
-    AuthDataSource datasource = AuthDataSource(authApiMock);
+    AuthApiMock authApiMock;
+    AuthDataSource datasource;
+    setUp(() {
+      authApiMock = AuthApiMock();
+      when(authApiMock.loginWithEmail(
+              email: anyNamed('email'), password: anyNamed('password')))
+          .thenAnswer((value) => Stream.value(FirebaseFakeUser()));
+      when(authApiMock.registerWithEmail(
+              email: anyNamed('email'), password: anyNamed('password')))
+          .thenAnswer((value) => Stream.value(FirebaseFakeUser()));
+      datasource = AuthDataSource(authApiMock);
+    });
+
+    tearDown(() {
+      datasource = null;
+      authApiMock = null;
+    });
 
     test('login with email', () async {
       expectLater(
@@ -125,6 +141,7 @@ main() {
           .called(1);
     });
     test('register with email', () async {
+      expect(datasource, isNotNull);
       expectLater(
           datasource.registerWithEmailAndPassword('teste@teste.com', '123123'),
           emits(isA<UserModel>()
