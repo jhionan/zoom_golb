@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zoom_golb/core/base_bloc/base_bloc.dart';
+import 'package:zoom_golb/core/navigation/app_routes.dart';
 import 'package:zoom_golb/core/theme/app_colors.dart';
 import 'package:zoom_golb/features/auth/bloc/auth_events.dart';
 import 'package:zoom_golb/features/auth/bloc/auth_provider.dart';
@@ -108,6 +109,11 @@ class _LoginState extends State<Login> {
                                   decoration: InputDecoration(
                                     labelText: _emailLabelText,
                                   ),
+                                  keyboardType: TextInputType.emailAddress,
+                                  textInputAction: TextInputAction.next,
+                                  onSubmitted: (value) {
+                                    FocusScope.of(context).requestFocus(_passwordFocusNode);
+                                  },
                                 ),
                                 SizedBox(
                                   height: 16,
@@ -115,7 +121,9 @@ class _LoginState extends State<Login> {
                                 TextField(
                                   focusNode: _passwordFocusNode,
                                   controller: _passwordController,
-                                  obscureText: obscure,
+                                  obscureText: obscure,keyboardType: TextInputType.text,
+                                  textInputAction: TextInputAction.send,
+                                  onSubmitted: (_) => _submitLogin(),
                                   decoration: InputDecoration(
                                     labelText: _passwordLabelText,
                                     suffixIcon: IconButton(
@@ -191,7 +199,6 @@ class _LoginState extends State<Login> {
   }
 
   _navigate() {
-    //TODO Navigate to feed
-    print('NAVIGATE!');
+    Navigator.of(context).pushReplacementNamed(AppRoutes.feed);
   }
 }
