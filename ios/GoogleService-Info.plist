@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>92191841718-i9cksjsmur6kd05thvnt2j8divodb6pp.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.92191841718-i9cksjsmur6kd05thvnt2j8divodb6pp</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>92191841718-c1fo7jn41a0843mr59lbge25iei4rffa.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyC0E6-HHVgbrMr771aMmgs8A3BtmP4iJiw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>92191841718</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>app.foca.zoomGolb</string>
+	<key>PROJECT_ID</key>
+	<string>zoomgolb</string>
+	<key>STORAGE_BUCKET</key>
+	<string>zoomgolb.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:92191841718:ios:dd738fff005af92b597517</string>
+</dict>
+</plist>
