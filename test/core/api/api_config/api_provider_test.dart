@@ -37,18 +37,7 @@ main() {
 
     expect(
         _api,
-        isA<BaseApi>().having((baseApi) => baseApi.instance,
-            'Instance of dio must not be null', isNotNull));
+        isA<BaseApi>().having((baseApi) => BaseApi.baseUrls,
+            'Base urls are not empty', isNotEmpty));
   }, timeout: Timeout(Duration(minutes: 1)));
-
-  // testWidgets('create BaseApi', (tester) async {
-  //   final container = ProviderContainer();
-
-  //   BaseApi _api = await container.read(apiProvider.future);
-
-  //   expect(
-  //       _api,
-  //       isA<BaseApi>().having((baseApi) => baseApi.instance,
-  //           'Instance of dio must not be null', isNotNull));
-  // }, timeout: Timeout(Duration(minutes: 1)));
 }
