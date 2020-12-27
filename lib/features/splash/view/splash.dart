@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:zoom_golb/core/base_bloc/base_bloc.dart';
 import 'package:zoom_golb/core/navigation/app_routes.dart';
-import 'package:zoom_golb/features/splash/bloc/splash_bloc.dart';
 import 'package:zoom_golb/features/splash/bloc/splash_events.dart';
 import 'package:zoom_golb/features/splash/bloc/splash_provider.dart';
 
