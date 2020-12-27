@@ -1,25 +1,34 @@
 import 'package:dio/dio.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:zoom_golb/core/api/api_config_model.dart';
 
 typedef ApiFactoryDelegate = Future<BaseApi> Function();
 
 class BaseApi {
   BaseApi(this._apiconfig) {
-    _dio = Dio();
-    _dio.options.baseUrl = _apiconfig.baseNews;
-    ready.add(true);
+    baseUrls = {
+      ApiServices.dummy: _apiconfig.baseDummy,
+      ApiServices.news: _apiconfig.baseNews
+    };
+    dummyHeader = {'_app-id': _apiconfig.appId};
   }
 
   final ApiConfigModel _apiconfig;
-  Dio _dio;
-  static BehaviorSubject<bool> ready = BehaviorSubject.seeded(false);
-
-  dispose() {
-    ready.close();
-  }
-
-  Dio get instance => _dio;
+  static Map<ApiServices, String> baseUrls;
+  static Map<String, String> dummyHeader;
 }
 
-mixin Api {}
+enum ApiServices { dummy, news }
+
+mixin Api {
+  Dio _dio = Dio();
+  Dio get dummyApi {
+    _dio.options.headers = BaseApi.dummyHeader;
+    _dio.options.baseUrl = BaseApi.baseUrls[ApiServices.dummy];
+    return _dio;
+  }
+
+  Dio get newsApi {
+    _dio.options.baseUrl = BaseApi.baseUrls[ApiServices.news];
+    return _dio;
+  }
+}

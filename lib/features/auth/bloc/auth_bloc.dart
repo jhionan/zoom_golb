@@ -61,6 +61,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _loading([bool isLoading = true]) {
     eventController.add(lastState?.copyWith(loading: isLoading) ??
-        AuthState(obscurePassword: isLoading));
+        AuthState(loading: isLoading));
   }
 }
