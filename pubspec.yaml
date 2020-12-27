@@ -36,6 +36,8 @@ dependencies:
   firebase_crashlytics: ^0.2.4
   flutter_riverpod: ^0.12.1
   dio: ^3.0.10
+  animated_bottom_navigation_bar: ^0.2.1
+  cloud_firestore: ^0.14.4
   
   
 

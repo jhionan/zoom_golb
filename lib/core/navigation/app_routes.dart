@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zoom_golb/features/auth/view/login.dart';
+import 'package:zoom_golb/features/feed/feed.dart';
 import 'package:zoom_golb/features/splash/view/splash.dart';
 
 class AppRoutes {
@@ -14,6 +15,10 @@ class AppRoutes {
         break;
       case login:
         page = Login();
+        break;
+      case feed:
+        page = Feed();
+        break;
     }
     return MaterialPageRoute(builder: (context) => page);
   }
