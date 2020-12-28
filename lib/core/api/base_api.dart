@@ -10,7 +10,7 @@ class BaseApi {
       ApiServices.dummy: _apiconfig.baseDummy,
       ApiServices.news: _apiconfig.baseNews
     };
-    dummyHeader = {'_app-id': _apiconfig.appId};
+    dummyHeader = {'app-id': _apiconfig.appId};
   }
 
   final ApiConfigModel _apiconfig;
@@ -23,7 +23,7 @@ enum ApiServices { dummy, news }
 mixin Api {
   Dio _dio = Dio();
   Dio get dummyApi {
-    _dio.options.headers = BaseApi.dummyHeader;
+    _dio.options.headers = _dio.options.headers..addAll(BaseApi.dummyHeader);
     _dio.options.baseUrl = BaseApi.baseUrls[ApiServices.dummy];
     return _dio;
   }
