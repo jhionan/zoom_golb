@@ -88,7 +88,7 @@ class _LoginState extends State<Login> {
                         _initEvent(_bloc);
 
                         return StreamBuilder<AuthState>(
-                            stream: _bloc.event$,
+                            stream: _bloc.state$,
                             builder: (context, snapshot) {
                               bool obscure =
                                   snapshot?.data?.obscurePassword ?? true;
@@ -168,7 +168,7 @@ class _LoginState extends State<Login> {
                   watch(AuthProvider.authBloc);
 
               return StreamBuilder<bool>(
-                  stream: bloc.event$
+                  stream: bloc.state$
                       .map((event) => event != null && event.loading),
                   initialData: false,
                   builder: (context, snapshot) {

@@ -54,7 +54,7 @@ main() {
       }
 
       expectLater(
-          authBloc.event$,
+          authBloc.state$,
           emits(isA<AuthState>()
               .having((state) => state.loading, 'is loading = true', true)));
 
@@ -77,7 +77,7 @@ main() {
       }
 
       expectLater(
-          authBloc.event$,
+          authBloc.state$,
           emits(isA<AuthState>()
               .having((state) => state.loading, 'is loading = true', true)));
 
@@ -97,7 +97,7 @@ main() {
     test('toggle obscure', () async {
       bool obscure = true;
       expectLater(
-          authBloc.event$,
+          authBloc.state$,
           emitsInOrder([
             isA<AuthState>().having(
                 (state) => state.obscurePassword, 'obscure = false', false),
