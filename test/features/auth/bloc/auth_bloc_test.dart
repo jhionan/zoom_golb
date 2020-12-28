@@ -20,6 +20,9 @@ class FirebaseFakeUser extends Fake implements User {
 
   @override
   String get photoURL => null;
+
+  @override
+  String get uid => 'uuid';
 }
 
 main() {
