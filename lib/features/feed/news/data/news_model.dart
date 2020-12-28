@@ -9,7 +9,7 @@ class NewsApiModel {
     this.news,
   });
 
-  final List<News> news;
+  final List<NewsModel> news;
 
   factory NewsApiModel.fromJson(Map<String, Object> json) =>
       _$NewsApiModelFromJson(json);
@@ -17,8 +17,8 @@ class NewsApiModel {
 }
 
 @JsonSerializable()
-class News {
-  News({
+class NewsModel {
+  NewsModel({
     this.user,
     this.message,
   });
@@ -26,7 +26,7 @@ class News {
   final UserModel user;
   final Message message;
 
-  factory News.fromJson(Map<String, Object> json) => _$NewsFromJson(json);
+  factory NewsModel.fromJson(Map<String, Object> json) => _$NewsFromJson(json);
   Map<String, Object> toJson() => _$NewsToJson(this);
 }
 

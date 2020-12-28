@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:zoom_golb/core/api/api_config_model.dart';
+export 'package:dio/dio.dart';
 
 typedef ApiFactoryDelegate = Future<BaseApi> Function();
 

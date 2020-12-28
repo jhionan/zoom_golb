@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:zoom_golb/core/base_bloc/base_bloc.dart';
+import 'package:zoom_golb/features/feed/news/bloc/news_event.dart';
+import 'package:zoom_golb/features/feed/news/bloc/news_state.dart';
+import 'package:zoom_golb/features/feed/news/data/news_model.dart';
+import 'package:zoom_golb/features/feed/view/widgets/feed_message_item.dart';
 
 class News extends StatelessWidget {
+  final BaseBloc<NewsEvent, NewsState> bloc;
+
+  const News({
+    Key key,
+    @required this.bloc,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -12,6 +23,28 @@ class News extends StatelessWidget {
           topRight: Radius.circular(24),
         ),
       ),
+      child: StreamBuilder<NewsState>(
+          stream: bloc.event$,
+          builder: (context, snapshot) {
+            List<NewsModel> news = [];
+            if (snapshot.hasData && snapshot.data is NewsStateFetched) {
+              NewsStateFetched state = snapshot.data;
+              news = state.news;
+            }
+            return ListView.separated(
+              padding: EdgeInsets.symmetric(vertical: 24),
+              itemBuilder: (context, index) {
+                return FeedMessageItem(
+                  message: news[index].message,
+                  user: news[index].user,
+                );
+              },
+              itemCount: news.length,
+              separatorBuilder: (_, __) => SizedBox(
+                height: 8,
+              ),
+            );
+          }),
     );
   }
 }
