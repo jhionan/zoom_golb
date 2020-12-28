@@ -8,4 +8,5 @@ abstract class AuthApi {
       {@required String email, @required String password});
   Stream loginWithGoogle();
   Stream forgotPassword(String email);
+  Stream<User> currentUser();
 }

@@ -20,6 +20,7 @@ class _LoginState extends State<Login> {
   FocusNode _passwordFocusNode;
   BaseBloc<AuthEvent, AuthState> _bloc;
   bool _opennedDialog = false;
+  bool _sentInitEvent = false;
 
   @override
   void initState() {
@@ -27,6 +28,7 @@ class _LoginState extends State<Login> {
     _passwordController = TextEditingController();
     _emailFocusNode = FocusNode();
     _passwordFocusNode = FocusNode();
+
     super.initState();
   }
 
@@ -83,7 +85,8 @@ class _LoginState extends State<Login> {
                           T Function<T>(ProviderBase<Object, T>) watch,
                           Widget child) {
                         _bloc = watch(AuthProvider.authBloc);
-                        print(_bloc);
+                        _initEvent(_bloc);
+
                         return StreamBuilder<AuthState>(
                             stream: _bloc.event$,
                             builder: (context, snapshot) {
@@ -112,7 +115,8 @@ class _LoginState extends State<Login> {
                                   keyboardType: TextInputType.emailAddress,
                                   textInputAction: TextInputAction.next,
                                   onSubmitted: (value) {
-                                    FocusScope.of(context).requestFocus(_passwordFocusNode);
+                                    FocusScope.of(context)
+                                        .requestFocus(_passwordFocusNode);
                                   },
                                 ),
                                 SizedBox(
@@ -121,7 +125,8 @@ class _LoginState extends State<Login> {
                                 TextField(
                                   focusNode: _passwordFocusNode,
                                   controller: _passwordController,
-                                  obscureText: obscure,keyboardType: TextInputType.text,
+                                  obscureText: obscure,
+                                  keyboardType: TextInputType.text,
                                   textInputAction: TextInputAction.send,
                                   onSubmitted: (_) => _submitLogin(),
                                   decoration: InputDecoration(
@@ -200,5 +205,12 @@ class _LoginState extends State<Login> {
 
   _navigate() {
     Navigator.of(context).pushReplacementNamed(AppRoutes.feed);
+  }
+
+  void _initEvent(BaseBloc bloc) {
+    if (!_sentInitEvent) {
+      _sentInitEvent = true;
+      bloc.inEvent.add(AuthEventInit(_navigate));
+    }
   }
 }

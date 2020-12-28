@@ -11,6 +11,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   @override
   onData(AuthEvent event) {
     switch (event.runtimeType) {
+      case AuthEventInit:
+      _verifyIfLogged(event);
+      break;
       case AuthEventToggleObscure:
         AuthEventToggleObscure typedEvent = event;
         eventController.add(
@@ -62,5 +65,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _loading([bool isLoading = true]) {
     eventController.add(lastState?.copyWith(loading: isLoading) ??
         AuthState(loading: isLoading));
+  }
+
+  void _verifyIfLogged(AuthEventInit event) {
+    _authDataSource.isLoggedIn().listen((isLogged){
+      if(isLogged) {
+        event.success();
+      }
+    });
   }
 }

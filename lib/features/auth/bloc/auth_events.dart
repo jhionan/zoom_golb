@@ -31,3 +31,9 @@ class AuthEventRegister extends AuthEvent {
     this.success,
   });
 }
+
+class AuthEventInit extends AuthEvent {
+  final Function success;
+
+  AuthEventInit(this.success);
+}
