@@ -6,7 +6,7 @@ class NewsDataSource {
 
   NewsDataSource(this._newsApi);
 
-  Stream<List<NewsModel>> fetchNews() async* {
+  Stream<List<PostModel>> fetchNews() async* {
     yield* _newsApi.getNews();
   }
 }

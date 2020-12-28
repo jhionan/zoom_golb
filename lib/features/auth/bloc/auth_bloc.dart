@@ -16,7 +16,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         break;
       case AuthEventToggleObscure:
         AuthEventToggleObscure typedEvent = event;
-        eventController.add(
+        stateController.add(
             lastState?.copyWith(obscurePassword: typedEvent.obscurePassword) ??
                 AuthState(obscurePassword: typedEvent.obscurePassword));
         break;
@@ -42,7 +42,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (error is FirebaseAuthException) {
       switch (error.code) {
         case 'user-not-found':
-          eventController.add(AuthStateUserNotFound(
+          stateController.add(AuthStateUserNotFound(
               obscurePassword: lastState?.obscurePassword));
           break;
         case 'weak-password':
@@ -63,7 +63,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _loading([bool isLoading = true]) {
-    eventController.add(lastState?.copyWith(loading: isLoading) ??
+    stateController.add(lastState?.copyWith(loading: isLoading) ??
         AuthState(loading: isLoading));
   }
 

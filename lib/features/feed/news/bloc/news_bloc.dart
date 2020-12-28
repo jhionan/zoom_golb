@@ -23,7 +23,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
   _fetch() {
     _dataSource.fetchNews().listen((newsList) {
-      eventController.add(NewsStateFetched(newsList));
+      stateController.add(NewsStateFetched(newsList));
     });
   }
 }

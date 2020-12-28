@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zoom_golb/core/theme/app_colors.dart';
+import 'package:zoom_golb/core/utils/extensions.dart';
 import 'package:zoom_golb/features/auth/data/user_model.dart';
 import 'package:zoom_golb/features/feed/news/data/news_model.dart';
 
@@ -17,26 +18,52 @@ class FeedMessageItem extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(8),
       margin: EdgeInsets.symmetric(horizontal: 16),
-      height: isNews ? null : 100,
+      height: isNews ? null : 120,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
         border:
             Border.all(color: isNews ? AppColors.primary : AppColors.secundary),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          CircleAvatar(
-            radius: 26,
-            child: _photoOrInitials(),
+          Text(
+            message.createdAt.toBrazilian(),
+            style: TextStyle(fontSize: 10, fontWeight: FontWeight.w300),
           ),
-          SizedBox(
-            width: 4,
+          Row(
+            children: [
+              SizedBox(
+                width: 60,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    CircleAvatar(
+                      radius: 26,
+                      child: ClipOval(child: _photoOrInitials()),
+                    ),
+                    SizedBox(
+                      height: 2,
+                    ),
+                    Text(
+                      user?.name ?? '',
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 12),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: 4,
+              ),
+              Expanded(
+                child: Text(
+                  message?.content ?? '',
+                ),
+              )
+            ],
           ),
-          Expanded(
-            child: Text(
-              message?.content ?? '',
-            ),
-          )
         ],
       ),
     );
@@ -58,16 +85,18 @@ class FeedMessageItem extends StatelessWidget {
     if (user?.profilePicture != null)
       return Image.network(
         user?.profilePicture,
-        loadingBuilder: (context, image, imageChunk) {
-          if (imageChunk?.cumulativeBytesLoaded == null &&
-              imageChunk?.expectedTotalBytes == null) return textWidget;
-          if (imageChunk.cumulativeBytesLoaded <
-              imageChunk.expectedTotalBytes) {
+        loadingBuilder: (context, child, loadingProcess) {
+          Semantics imageSemantics = child;
+          if (loadingProcess != null) {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
-          return image;
+          if (imageSemantics.child is RawImage &&
+              (imageSemantics.child as RawImage).image == null) {
+            return textWidget;
+          }
+          return child;
         },
       );
 

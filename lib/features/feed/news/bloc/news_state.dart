@@ -6,7 +6,7 @@ import 'package:zoom_golb/features/feed/news/data/news_model.dart';
 class NewsState extends BaseState {}
 
 class NewsStateFetched extends NewsState {
-  final List<NewsModel> news;
+  final List<PostModel> news;
 
   NewsStateFetched(this.news);
 

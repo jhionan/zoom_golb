@@ -24,9 +24,9 @@ class News extends StatelessWidget {
         ),
       ),
       child: StreamBuilder<NewsState>(
-          stream: bloc.event$,
+          stream: bloc.state$,
           builder: (context, snapshot) {
-            List<NewsModel> news = [];
+            List<PostModel> news = [];
             if (snapshot.hasData && snapshot.data is NewsStateFetched) {
               NewsStateFetched state = snapshot.data;
               news = state.news;

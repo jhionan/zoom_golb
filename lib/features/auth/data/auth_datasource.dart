@@ -32,7 +32,8 @@ class AuthDataSource {
         return UserModel(
             email: event.email,
             name: event.displayName,
-            profilePicture: event.photoURL);
+            profilePicture: event.photoURL,
+            id: event.uid);
       } else {
         throw 'Unknow Error';
       }

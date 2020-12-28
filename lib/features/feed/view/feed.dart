@@ -2,6 +2,7 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zoom_golb/core/theme/app_colors.dart';
+import 'package:zoom_golb/features/feed/feed_posts/bloc/feed_post_provider.dart';
 import 'package:zoom_golb/features/feed/feed_posts/view/feed_new_post.dart';
 import 'package:zoom_golb/features/feed/feed_posts/view/feed_posts.dart';
 import 'package:zoom_golb/features/feed/news/bloc/news_provider.dart';
@@ -33,8 +34,12 @@ class _FeedState extends State<Feed> {
             News(
               bloc: watch(NewsProvider.newsBloc),
             ),
-            FeedPosts(),
-            FeedNewPosts()
+            FeedPosts(
+              bloc: watch(FeedPostProvider.feedPost),
+            ),
+            FeedNewPosts(
+              bloc: watch(FeedPostProvider.feedPost),
+            )
           ];
           return Scaffold(
             backgroundColor: Colors.transparent,
