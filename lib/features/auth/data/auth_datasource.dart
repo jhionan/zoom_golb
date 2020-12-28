@@ -40,6 +40,6 @@ class AuthDataSource {
   }
 
   Stream<bool> isLoggedIn() async* {
-    yield* _authApi.currentUser().map((user) => user!=null);
+    yield* _authApi.currentUser().map((user) => user != null);
   }
 }

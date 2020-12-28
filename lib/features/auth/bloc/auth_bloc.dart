@@ -12,8 +12,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   onData(AuthEvent event) {
     switch (event.runtimeType) {
       case AuthEventInit:
-      _verifyIfLogged(event);
-      break;
+        _verifyIfLogged(event);
+        break;
       case AuthEventToggleObscure:
         AuthEventToggleObscure typedEvent = event;
         eventController.add(
@@ -68,8 +68,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _verifyIfLogged(AuthEventInit event) {
-    _authDataSource.isLoggedIn().listen((isLogged){
-      if(isLogged) {
+    _authDataSource.isLoggedIn().listen((isLogged) {
+      if (isLogged) {
         event.success();
       }
     });
