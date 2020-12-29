@@ -26,8 +26,8 @@ class PostModel {
   final UserModel user;
   final Message message;
 
-  factory PostModel.fromJson(Map<String, Object> json) => _$NewsFromJson(json);
-  Map<String, Object> toJson() => _$NewsToJson(this);
+  factory PostModel.fromJson(Map<String, Object> json) => _$PostModelFromJson(json);
+  Map<String, Object> toJson() => _$PostModelToJson(this);
 }
 
 @JsonSerializable()
