@@ -5,6 +5,7 @@ class FeedPostEvent extends BaseEvent {}
 
 class FeedPostEventAddPost extends FeedPostEvent {
   final PostModel post;
+  final Function success;
 
-  FeedPostEventAddPost(this.post);
+  FeedPostEventAddPost(this.post, this.success);
 }

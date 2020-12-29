@@ -17,9 +17,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         break;
       case AuthEventToggleObscure:
         AuthEventToggleObscure typedEvent = event;
-        stateController.add(
-            lastState?.copyWith(obscurePassword: typedEvent.obscurePassword, loading: false) ??
-                AuthState(obscurePassword: typedEvent.obscurePassword));
+        stateController.add(lastState?.copyWith(
+                obscurePassword: typedEvent.obscurePassword, loading: false) ??
+            AuthState(obscurePassword: typedEvent.obscurePassword));
         break;
       case AuthEventSubmit:
         _loading();
@@ -29,8 +29,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         _loading();
         _validateAndRegister(event);
         break;
-        case AuthEventCleanError: 
-          stateController.add(AuthState());
+      case AuthEventCleanError:
+        stateController.add(AuthState());
         break;
     }
   }
@@ -62,9 +62,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           break;
         case 'email-already-in-use':
           break;
-        case 'wrong-password': 
-        stateController.addError(AuthStateError(passwordError: 'Senha inválida'));
-        break;
+        case 'wrong-password':
+          stateController
+              .addError(AuthStateError(passwordError: 'Senha inválida'));
+          break;
       }
     }
     print(error.toString());
@@ -86,7 +87,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _verifyIfLogged(AuthEventInit event) {
     _authDataSource.isLoggedIn().listen((isLogged) {
       if (isLogged) {
-        // event.success();
+        event.success();
       }
     });
   }

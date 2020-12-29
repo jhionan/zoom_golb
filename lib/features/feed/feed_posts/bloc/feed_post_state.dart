@@ -7,6 +7,23 @@ class FeedPostState extends BaseState {}
 class FeedPostStateFetched extends FeedPostState {
   final List<PostModel> posts;
   final UserModel user;
+  final String errorMessage;
 
-  FeedPostStateFetched({this.posts, this.user});
+  FeedPostStateFetched({
+    this.posts,
+    this.user,
+    this.errorMessage,
+  });
+
+  FeedPostStateFetched copyWith({
+    List<PostModel> posts,
+    UserModel user,
+    String errorMessage,
+  }) {
+    return FeedPostStateFetched(
+      posts: posts ?? this.posts,
+      user: user ?? this.user,
+      errorMessage: errorMessage,
+    );
+  }
 }

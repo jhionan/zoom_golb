@@ -24,7 +24,8 @@ class FeedPostDatasource {
     //yield* _api.fetchFakePosts();
   }
 
-  void addPost(PostModel post) {
+  Stream<bool> addPost(PostModel post) async* {
     _api.addPost(post);
+    yield true;
   }
 }

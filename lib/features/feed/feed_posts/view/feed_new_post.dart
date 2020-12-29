@@ -54,82 +54,88 @@ class _FeedNewPostState extends State<FeedNewPost> {
           decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.75),
               borderRadius: BorderRadius.circular(24)),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (widget.args.post != null)
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Text(widget.args.post.message.createdAt.toBrazilian()),
-                ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 36,
-                    child: StreamBuilder<FeedPostState>(
-                        stream: widget.args.bloc.state$,
-                        builder: (context, snapshot) {
-                          String name = 'Guest';
-                          UserModel user;
-                          if (snapshot.hasData &&
-                              snapshot.data is FeedPostStateFetched) {
-                            FeedPostStateFetched data = snapshot.data;
-                            name = data.user.name;
-                            user = data.user;
-                          }
-                          return Column(
-                            children: [
-                              CircularAvatar(
-                                user: user,
-                                radius: 16,
-                              ),
-                              Text(
-                                name,
-                                style: TextStyle(
-                                    fontSize: 10, color: Colors.black),
-                              ),
-                            ],
-                          );
-                        }),
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Flexible(
-                    child: TextField(
-                      controller: _messageController,
-                      maxLines: null,
-                      maxLength: 280,
-                      textInputAction: TextInputAction.send,
-                      decoration: InputDecoration(
-                        hintText: 'O que esta acontecendo?',
-                        hintStyle: TextStyle(color: Colors.black),
+          child: StreamBuilder<FeedPostState>(
+              stream: widget.args.bloc.state$,
+              builder: (context, snapshot) {
+                String name = 'Guest';
+                UserModel user;
+                String errorMessage;
+                if (snapshot.hasData && snapshot.data is FeedPostStateFetched) {
+                  FeedPostStateFetched data = snapshot.data;
+                  name = data.user.name;
+                  user = data.user;
+                  errorMessage = data.errorMessage;
+                }
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (widget.args.post != null)
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Text(
+                            widget.args.post.message.createdAt.toBrazilian()),
                       ),
+                    Row(
+                      children: [
+                        SizedBox(
+                            width: 36,
+                            child: Column(
+                              children: [
+                                CircularAvatar(
+                                  user: user,
+                                  radius: 16,
+                                ),
+                                Text(
+                                  name,
+                                  style: TextStyle(
+                                      fontSize: 10, color: Colors.black),
+                                ),
+                              ],
+                            )),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Flexible(
+                          child: TextField(
+                            controller: _messageController,
+                            maxLines: null,
+                            maxLength: 280,
+                            textInputAction: TextInputAction.send,
+                            onChanged: (_) {
+                              if (errorMessage != null) {
+                                widget.args.bloc.inEvent.add(FeedPostEvent());
+                              }
+                            },
+                            decoration: InputDecoration(
+                              hintText: 'O que esta acontecendo?',
+                              hintStyle: TextStyle(color: Colors.black),
+                              errorText: errorMessage,
+                            ),
+                          ),
+                        )
+                      ],
                     ),
-                  )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  MaterialButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('Cancelar'),
-                  ),
-                  MaterialButton(
-                    onPressed: () {
-                      _submit();
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('ENVIAR'),
-                    color: AppColors.accent,
-                  ),
-                ],
-              )
-            ],
-          ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        MaterialButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('Cancelar'),
+                        ),
+                        MaterialButton(
+                          onPressed: () {
+                            _submit();
+                          },
+                          child: Text('ENVIAR'),
+                          color: AppColors.accent,
+                        ),
+                      ],
+                    )
+                  ],
+                );
+              }),
         ),
       ),
     );
@@ -139,25 +145,29 @@ class _FeedNewPostState extends State<FeedNewPost> {
     if (widget.args.post == null) {
       widget.args.bloc.inEvent.add(
         FeedPostEventAddPost(
-          PostModel(
-            message: Message(
-              content: _messageController.text,
-              createdAt: DateTime.now().toUtc(),
+            PostModel(
+              message: Message(
+                content: _messageController.text,
+                createdAt: DateTime.now().toUtc(),
+              ),
             ),
-          ),
-        ),
+            _navigationPop),
       );
     } else {
       widget.args.bloc.inEvent.add(
         FeedPostEventAddPost(
-          widget.args.post.copyWith(
-            message: widget.args.post.message.copyWith(
-              content: _messageController.text,
-              updatedAt: DateTime.now().toUtc(),
+            widget.args.post.copyWith(
+              message: widget.args.post.message.copyWith(
+                content: _messageController.text,
+                updatedAt: DateTime.now().toUtc(),
+              ),
             ),
-          ),
-        ),
+            _navigationPop),
       );
     }
+  }
+
+  void _navigationPop() {
+    Navigator.of(context).pop();
   }
 }

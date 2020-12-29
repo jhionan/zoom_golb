@@ -16,7 +16,10 @@ class FeedPostBloc extends Bloc<FeedPostEvent, FeedPostState> {
   onData(FeedPostEvent event) {
     switch (event.runtimeType) {
       case FeedPostEventAddPost:
-        _addPost(event);
+        _validateAndSubmit(event);
+        break;
+      default:
+        stateController.add((lastState as FeedPostStateFetched).copyWith());
         break;
     }
   }
@@ -39,6 +42,24 @@ class FeedPostBloc extends Bloc<FeedPostEvent, FeedPostState> {
   }
 
   void _addPost(FeedPostEventAddPost event) {
-    _datasource.addPost(event.post.copyWith(user: currentUser));
+    _datasource
+        .addPost(event.post.copyWith(user: currentUser))
+        .listen((success) => event.success());
+  }
+
+  void _validateAndSubmit(FeedPostEventAddPost event) {
+    if (event.post.message.content.isNotEmpty &&
+        event.post.message.content.length < 281) {
+      _addPost(event);
+    } else {
+      String errorMessage;
+      if (event.post.message.content.isEmpty) {
+        errorMessage = 'Digite uma mensagem para enviar';
+      } else {
+        errorMessage = 'Limite máximo de 280 caracteres';
+      }
+      FeedPostStateFetched fetchedState = lastState;
+      stateController.add(fetchedState.copyWith(errorMessage: errorMessage));
+    }
   }
 }
