@@ -81,7 +81,8 @@ class _FeedState extends State<Feed> {
               ),
               onPressed: () {
                 Navigator.of(context).pushNamed(AppRoutes.newPost,
-                    arguments: FeedNewPostArgs(bloc: context.read(FeedPostProvider.feedPost)));
+                    arguments: FeedNewPostArgs(
+                        bloc: context.read(FeedPostProvider.feedPost)));
               },
             ),
             floatingActionButtonLocation:

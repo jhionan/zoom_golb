@@ -15,7 +15,7 @@ class AuthDataSource {
         .loginWithEmail(email: email, password: password)
         .map((event) {
       if (event != null) {
-        UserModel userModel =_userModelFromFirebase(event);
+        UserModel userModel = _userModelFromFirebase(event);
         _saveUser(userModel);
         return userModel;
       } else {

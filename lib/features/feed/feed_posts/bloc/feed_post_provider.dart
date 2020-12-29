@@ -7,7 +7,8 @@ import 'package:zoom_golb/features/feed/feed_posts/data/feed_post_datasource.dar
 class FeedPostProvider {
   FeedPostProvider._();
   static final feedPost = Provider.autoDispose<FeedPostBloc>((ref) {
-    FeedPostBloc _bloc = FeedPostBloc(FeedPostDatasource(FeedPostApiImp(), ref.read(DbProvider.db)));
+    FeedPostBloc _bloc = FeedPostBloc(
+        FeedPostDatasource(FeedPostApiImp(), ref.read(DbProvider.db)));
     ref.onDispose(() {
       _bloc.dispose();
     });

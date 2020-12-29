@@ -12,8 +12,9 @@ class AuthProvider {
   });
 
   static final authBloc = Provider.autoDispose<AuthBloc>((ref) {
-    AuthBloc _bloc = AuthBloc(
-        AuthDataSource(ref.read<FirebaseApiAuth>(_fireBaseAuthProvider), ref.read(DbProvider.db)));
+    AuthBloc _bloc = AuthBloc(AuthDataSource(
+        ref.read<FirebaseApiAuth>(_fireBaseAuthProvider),
+        ref.read(DbProvider.db)));
     ref.onDispose(() {
       _bloc.dispose();
     });

@@ -5,13 +5,14 @@ class CircularAvatar extends StatelessWidget {
   final UserModel user;
   final double radius;
 
-  const CircularAvatar({Key key, this.user, this.radius = 26}) : super(key: key);
+  const CircularAvatar({Key key, this.user, this.radius = 26})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return  CircleAvatar(
-                      radius: radius,
-                      child: ClipOval(child: _photoOrInitials()),
-                    );
+    return CircleAvatar(
+      radius: radius,
+      child: ClipOval(child: _photoOrInitials()),
+    );
   }
 
   Widget _photoOrInitials() {

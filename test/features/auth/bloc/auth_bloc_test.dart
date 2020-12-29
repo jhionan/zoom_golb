@@ -12,6 +12,7 @@ import 'package:zoom_golb/features/auth/data/user_model.dart';
 class AuthDatasourceMock extends Mock implements AuthDataSource {}
 
 class AuthApiMock extends Mock implements AuthApi {}
+
 class DbMock extends Mock implements Db {}
 
 class FirebaseFakeUser extends Fake implements User {

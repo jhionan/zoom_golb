@@ -13,7 +13,7 @@ class FeedPostDatasource {
   Future<UserModel> get user async => await _db.getUser();
 
   Stream<List<PostModel>> fetchPosts([int page]) async* {
-   yield*  Rx.combineLatest2<List<PostModel>, List<PostModel>, List<PostModel>>(
+    yield* Rx.combineLatest2<List<PostModel>, List<PostModel>, List<PostModel>>(
         _api.fetchPosts(), _api.fetchFakePosts(), (posts, fakePosts) {
       if (posts.length < 5) {
         posts.addAll(fakePosts);

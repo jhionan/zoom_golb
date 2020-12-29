@@ -29,7 +29,7 @@ class _FeedNewPostState extends State<FeedNewPost> {
   @override
   void initState() {
     String initialValue;
-    if(widget.args.post != null) {
+    if (widget.args.post != null) {
       initialValue = widget.args.post.message.content;
     }
     _messageController = TextEditingController(text: initialValue);

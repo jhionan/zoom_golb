@@ -31,10 +31,9 @@ class PostModel {
   final String id;
   final DateTime createdAt;
 
-  factory PostModel.fromJson(Map<String, Object> json) => _$PostModelFromJson(json);
+  factory PostModel.fromJson(Map<String, Object> json) =>
+      _$PostModelFromJson(json);
   Map<String, Object> toJson() => _$PostModelToJson(this);
-
-  
 
   PostModel copyWith({
     UserModel user,

@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zoom_golb/core/navigation/app_routes.dart';
 import 'package:zoom_golb/core/theme/app_colors.dart';
 import 'package:zoom_golb/core/utils/extensions.dart';
-import 'package:zoom_golb/features/auth/data/user_model.dart';
 import 'package:zoom_golb/features/feed/feed_posts/bloc/feed_post_provider.dart';
 import 'package:zoom_golb/features/feed/feed_posts/view/feed_new_post.dart';
 import 'package:zoom_golb/features/feed/news/data/news_model.dart';
