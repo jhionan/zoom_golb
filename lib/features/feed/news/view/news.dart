@@ -26,20 +26,19 @@ class News extends StatelessWidget {
       child: StreamBuilder<NewsState>(
           stream: bloc.state$,
           builder: (context, snapshot) {
-            List<PostModel> news = [];
+            List<PostModel> posts = [];
             if (snapshot.hasData && snapshot.data is NewsStateFetched) {
               NewsStateFetched state = snapshot.data;
-              news = state.news;
+              posts = state.news;
             }
             return ListView.separated(
               padding: EdgeInsets.symmetric(vertical: 24),
               itemBuilder: (context, index) {
                 return FeedMessageItem(
-                  message: news[index].message,
-                  user: news[index].user,
+                  post: posts[index],
                 );
               },
-              itemCount: news.length,
+              itemCount: posts.length,
               separatorBuilder: (_, __) => SizedBox(
                 height: 8,
               ),

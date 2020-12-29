@@ -1,6 +1,7 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zoom_golb/core/navigation/app_routes.dart';
 import 'package:zoom_golb/core/theme/app_colors.dart';
 import 'package:zoom_golb/features/feed/feed_posts/bloc/feed_post_provider.dart';
 import 'package:zoom_golb/features/feed/feed_posts/view/feed_new_post.dart';
@@ -37,9 +38,6 @@ class _FeedState extends State<Feed> {
             FeedPosts(
               bloc: watch(FeedPostProvider.feedPost),
             ),
-            FeedNewPosts(
-              bloc: watch(FeedPostProvider.feedPost),
-            )
           ];
           return Scaffold(
             backgroundColor: Colors.transparent,
@@ -82,9 +80,8 @@ class _FeedState extends State<Feed> {
                 ),
               ),
               onPressed: () {
-                setState(() {
-                  activeIndex = 2;
-                });
+                Navigator.of(context).pushNamed(AppRoutes.newPost,
+                    arguments: FeedNewPostArgs(bloc: context.read(FeedPostProvider.feedPost)));
               },
             ),
             floatingActionButtonLocation:

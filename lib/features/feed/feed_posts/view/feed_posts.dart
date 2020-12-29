@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zoom_golb/core/base_bloc/base_bloc.dart';
+import 'package:zoom_golb/features/auth/data/user_model.dart';
 import 'package:zoom_golb/features/feed/feed_posts/bloc/feed_post_event.dart';
 import 'package:zoom_golb/features/feed/feed_posts/bloc/feed_post_state.dart';
 import 'package:zoom_golb/features/feed/news/data/news_model.dart';
@@ -23,21 +24,23 @@ class FeedPosts extends StatelessWidget {
       child: StreamBuilder<FeedPostState>(
           stream: bloc.state$,
           builder: (context, snapshot) {
-            List<PostModel> news = [];
+            List<PostModel> posts = [];
+            UserModel user;
             if (snapshot.hasData && snapshot.data is FeedPostStateFetched) {
               FeedPostStateFetched state = snapshot.data;
-              news = state.posts;
+              posts = state.posts;
+              user = state.user;
             }
             return ListView.separated(
               padding: EdgeInsets.symmetric(vertical: 24),
               itemBuilder: (context, index) {
                 return FeedMessageItem(
-                  message: news[index].message,
-                  user: news[index].user,
+                  post: posts[index],
+                  owner: posts[index].user.id == user?.id,
                   isNews: false,
                 );
               },
-              itemCount: news.length,
+              itemCount: posts.length,
               separatorBuilder: (_, __) => SizedBox(
                 height: 8,
               ),
