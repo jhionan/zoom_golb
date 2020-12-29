@@ -21,6 +21,8 @@ class _LoginState extends State<Login> {
   BaseBloc<AuthEvent, AuthState> _bloc;
   bool _opennedDialog = false;
   bool _sentInitEvent = false;
+  String emailErrorMessage;
+  String passwordErrorMessage;
 
   @override
   void initState() {
@@ -105,18 +107,44 @@ class _LoginState extends State<Login> {
                                 });
                               }
 
+                              if (snapshot.hasError &&
+                                  snapshot.error is AuthStateError) {
+                                AuthStateError error = snapshot.error;
+                                emailErrorMessage = error.emailError;
+                                passwordErrorMessage = error.passwordError;
+                                if (error.errorMessage != null) {
+                                  Scaffold.of(context).showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: Colors.red,
+                                      content: Text(
+                                        error.errorMessage,
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  );
+                                }
+                              } else {
+                                _cleanErrors();
+                              }
+
                               return Column(children: [
                                 TextField(
                                   focusNode: _emailFocusNode,
                                   controller: _emailController,
                                   decoration: InputDecoration(
                                     labelText: _emailLabelText,
+                                    errorText: emailErrorMessage,
                                   ),
                                   keyboardType: TextInputType.emailAddress,
                                   textInputAction: TextInputAction.next,
                                   onSubmitted: (value) {
                                     FocusScope.of(context)
                                         .requestFocus(_passwordFocusNode);
+                                  },
+                                  onChanged: (value) {
+                                    if (emailErrorMessage != null) {
+                                     _bloc.inEvent.add(AuthEventCleanError());
+                                    }
                                   },
                                 ),
                                 SizedBox(
@@ -129,8 +157,14 @@ class _LoginState extends State<Login> {
                                   keyboardType: TextInputType.text,
                                   textInputAction: TextInputAction.send,
                                   onSubmitted: (_) => _submitLogin(),
+                                  onChanged: (_){
+                                    if (passwordErrorMessage != null) {
+                                      _bloc.inEvent.add(AuthEventCleanError());
+                                    }
+                                  },
                                   decoration: InputDecoration(
                                     labelText: _passwordLabelText,
+                                    errorText: passwordErrorMessage,
                                     suffixIcon: IconButton(
                                       icon: Icon(
                                         Icons.visibility_outlined,
@@ -212,5 +246,10 @@ class _LoginState extends State<Login> {
       _sentInitEvent = true;
       bloc.inEvent.add(AuthEventInit(_navigate));
     }
+  }
+
+  void _cleanErrors() {
+   emailErrorMessage = null;
+   passwordErrorMessage = null;
   }
 }

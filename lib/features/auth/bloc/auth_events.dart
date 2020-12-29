@@ -37,3 +37,5 @@ class AuthEventInit extends AuthEvent {
 
   AuthEventInit(this.success);
 }
+
+class AuthEventCleanError extends AuthEvent {}

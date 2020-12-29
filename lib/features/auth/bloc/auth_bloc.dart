@@ -3,6 +3,7 @@ import 'package:zoom_golb/core/base_bloc/base_bloc.dart';
 import 'package:zoom_golb/features/auth/bloc/auth_events.dart';
 import 'package:zoom_golb/features/auth/bloc/auth_states.dart';
 import 'package:zoom_golb/features/auth/data/auth_datasource.dart';
+import 'package:zoom_golb/core/utils/extensions.dart' show StringEx;
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthDataSource _authDataSource;
@@ -17,7 +18,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       case AuthEventToggleObscure:
         AuthEventToggleObscure typedEvent = event;
         stateController.add(
-            lastState?.copyWith(obscurePassword: typedEvent.obscurePassword) ??
+            lastState?.copyWith(obscurePassword: typedEvent.obscurePassword, loading: false) ??
                 AuthState(obscurePassword: typedEvent.obscurePassword));
         break;
       case AuthEventSubmit:
@@ -27,10 +28,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       case AuthEventRegister:
         _loading();
         _validateAndRegister(event);
+        break;
+        case AuthEventCleanError: 
+          stateController.add(AuthState());
+        break;
     }
   }
 
   void _validateAndSubmit(AuthEventSubmit event) {
+    if (event.email.validEmail()) {
+      _submit(event);
+    } else {
+      stateController.addError(AuthStateError(emailError: 'Email inválido'));
+    }
+  }
+
+  void _submit(AuthEventSubmit event) {
     _authDataSource
         .loginWithEmailAndPassword(event.email, event.password)
         .listen((loginEvent) {
@@ -49,6 +62,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           break;
         case 'email-already-in-use':
           break;
+        case 'wrong-password': 
+        stateController.addError(AuthStateError(passwordError: 'Senha inválida'));
+        break;
       }
     }
     print(error.toString());
@@ -70,7 +86,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _verifyIfLogged(AuthEventInit event) {
     _authDataSource.isLoggedIn().listen((isLogged) {
       if (isLogged) {
-        event.success();
+        // event.success();
       }
     });
   }
