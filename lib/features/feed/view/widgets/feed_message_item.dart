@@ -26,7 +26,6 @@ class FeedMessageItem extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(8),
       margin: EdgeInsets.symmetric(horizontal: 16),
-
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
         border:

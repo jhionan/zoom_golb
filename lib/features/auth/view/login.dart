@@ -143,7 +143,7 @@ class _LoginState extends State<Login> {
                                   },
                                   onChanged: (value) {
                                     if (emailErrorMessage != null) {
-                                     _bloc.inEvent.add(AuthEventCleanError());
+                                      _bloc.inEvent.add(AuthEventCleanError());
                                     }
                                   },
                                 ),
@@ -157,7 +157,7 @@ class _LoginState extends State<Login> {
                                   keyboardType: TextInputType.text,
                                   textInputAction: TextInputAction.send,
                                   onSubmitted: (_) => _submitLogin(),
-                                  onChanged: (_){
+                                  onChanged: (_) {
                                     if (passwordErrorMessage != null) {
                                       _bloc.inEvent.add(AuthEventCleanError());
                                     }
@@ -249,7 +249,7 @@ class _LoginState extends State<Login> {
   }
 
   void _cleanErrors() {
-   emailErrorMessage = null;
-   passwordErrorMessage = null;
+    emailErrorMessage = null;
+    passwordErrorMessage = null;
   }
 }
