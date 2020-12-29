@@ -9,13 +9,37 @@ class Splash extends ConsumerWidget {
   @override
   Widget build(BuildContext context,
       T Function<T>(ProviderBase<Object, T> provider) watch) {
+        final double y = -0.002;
     BaseBloc<SplashEvent, SplashState> _bloc = watch(SplashProvider.splashBloc);
     _bloc.inEvent.add(SplashEvent(success: () {
       Navigator.of(context).pushReplacementNamed(AppRoutes.login);
     }));
 
-    return Container(
-      color: Colors.red,
+    return Material(
+      child: SafeArea(
+        child: Container(
+          color: Colors.black,
+          child: Transform(
+            transform: Matrix4(
+               1,0,0,0,
+                0,1,0,y,
+                0,0,1,0,
+                0,0,0,1,
+            )..rotateZ(y)..rotateY(y)..rotateX(y),
+            child: Container(
+
+              padding: EdgeInsets.only(right: 60, left: 20),
+              child: Text(
+                'Numa Galáxia não muito distante, em um planeta quase inofencivo existe um desenvolvedor apaixonado por Flutter.\n Jhionan',
+                style: TextStyle(
+                  color: Color(0xFFFFE81F),
+                  fontSize: 26,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
