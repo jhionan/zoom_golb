@@ -2,6 +2,7 @@ import 'package:riverpod/riverpod.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:zoom_golb/core/api/api_provider.dart';
 import 'package:zoom_golb/core/api/base_api.dart';
+import 'package:zoom_golb/core/db/db.dart';
 import 'package:zoom_golb/core/firebase/firebase_app.dart';
 
 abstract class SplashDatasource {
@@ -14,6 +15,7 @@ class SplashDatasourceImp implements SplashDatasource {
     yield* Rx.combineLatest<bool, bool>([
       _initApi(),
       _initFirebaseApp(),
+      _initDb(),
     ], (values) => values.every((element) => element));
   }
 
@@ -25,5 +27,9 @@ class SplashDatasourceImp implements SplashDatasource {
 
   Stream<bool> _initFirebaseApp() async* {
     yield* ProviderContainer().read(FirebaseApp.provideFirebaseApp.stream);
+  }
+
+  Stream<bool> _initDb() async* {
+    yield (ProviderContainer().read(DbProvider.db).runtimeType == Db);
   }
 }

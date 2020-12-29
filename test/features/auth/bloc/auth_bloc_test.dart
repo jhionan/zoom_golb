@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:zoom_golb/core/db/db.dart';
 import 'package:zoom_golb/features/auth/bloc/auth_bloc.dart';
 import 'package:zoom_golb/features/auth/bloc/auth_events.dart';
 import 'package:zoom_golb/features/auth/bloc/auth_states.dart';
@@ -11,6 +12,7 @@ import 'package:zoom_golb/features/auth/data/user_model.dart';
 class AuthDatasourceMock extends Mock implements AuthDataSource {}
 
 class AuthApiMock extends Mock implements AuthApi {}
+class DbMock extends Mock implements Db {}
 
 class FirebaseFakeUser extends Fake implements User {
   @override
@@ -116,15 +118,17 @@ main() {
   group('Datasource', () {
     AuthApiMock authApiMock;
     AuthDataSource datasource;
+    Db mockedDb;
     setUp(() {
       authApiMock = AuthApiMock();
+      mockedDb = DbMock();
       when(authApiMock.loginWithEmail(
               email: anyNamed('email'), password: anyNamed('password')))
           .thenAnswer((value) => Stream.value(FirebaseFakeUser()));
       when(authApiMock.registerWithEmail(
               email: anyNamed('email'), password: anyNamed('password')))
           .thenAnswer((value) => Stream.value(FirebaseFakeUser()));
-      datasource = AuthDataSource(authApiMock);
+      datasource = AuthDataSource(authApiMock, mockedDb);
     });
 
     tearDown(() {
