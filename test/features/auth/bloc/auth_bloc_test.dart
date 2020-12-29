@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:zoom_golb/core/db/db.dart';
 import 'package:zoom_golb/features/auth/bloc/auth_bloc.dart';
 import 'package:zoom_golb/features/auth/bloc/auth_events.dart';
 import 'package:zoom_golb/features/auth/bloc/auth_states.dart';
@@ -12,6 +13,8 @@ class AuthDatasourceMock extends Mock implements AuthDataSource {}
 
 class AuthApiMock extends Mock implements AuthApi {}
 
+class DbMock extends Mock implements Db {}
+
 class FirebaseFakeUser extends Fake implements User {
   @override
   String get displayName => 'User';
@@ -20,6 +23,9 @@ class FirebaseFakeUser extends Fake implements User {
 
   @override
   String get photoURL => null;
+
+  @override
+  String get uid => 'uuid';
 }
 
 main() {
@@ -54,7 +60,7 @@ main() {
       }
 
       expectLater(
-          authBloc.event$,
+          authBloc.state$,
           emits(isA<AuthState>()
               .having((state) => state.loading, 'is loading = true', true)));
 
@@ -77,7 +83,7 @@ main() {
       }
 
       expectLater(
-          authBloc.event$,
+          authBloc.state$,
           emits(isA<AuthState>()
               .having((state) => state.loading, 'is loading = true', true)));
 
@@ -97,7 +103,7 @@ main() {
     test('toggle obscure', () async {
       bool obscure = true;
       expectLater(
-          authBloc.event$,
+          authBloc.state$,
           emitsInOrder([
             isA<AuthState>().having(
                 (state) => state.obscurePassword, 'obscure = false', false),
@@ -113,15 +119,17 @@ main() {
   group('Datasource', () {
     AuthApiMock authApiMock;
     AuthDataSource datasource;
+    Db mockedDb;
     setUp(() {
       authApiMock = AuthApiMock();
+      mockedDb = DbMock();
       when(authApiMock.loginWithEmail(
               email: anyNamed('email'), password: anyNamed('password')))
           .thenAnswer((value) => Stream.value(FirebaseFakeUser()));
       when(authApiMock.registerWithEmail(
               email: anyNamed('email'), password: anyNamed('password')))
           .thenAnswer((value) => Stream.value(FirebaseFakeUser()));
-      datasource = AuthDataSource(authApiMock);
+      datasource = AuthDataSource(authApiMock, mockedDb);
     });
 
     tearDown(() {

@@ -43,3 +43,15 @@ class AuthStateUserNotFound extends AuthState {
             obscurePassword: obscurePassword,
             loading: loading);
 }
+
+class AuthStateError extends AuthState {
+  AuthStateError({
+    this.emailError,
+    this.passwordError,
+    this.errorMessage,
+  });
+  final String emailError;
+  final String passwordError;
+  final String errorMessage;
+  final bool loading = false;
+}

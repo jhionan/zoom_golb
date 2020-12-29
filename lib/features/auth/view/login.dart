@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zoom_golb/core/base_bloc/base_bloc.dart';
+import 'package:zoom_golb/core/navigation/app_routes.dart';
 import 'package:zoom_golb/core/theme/app_colors.dart';
 import 'package:zoom_golb/features/auth/bloc/auth_events.dart';
 import 'package:zoom_golb/features/auth/bloc/auth_provider.dart';
@@ -19,6 +20,9 @@ class _LoginState extends State<Login> {
   FocusNode _passwordFocusNode;
   BaseBloc<AuthEvent, AuthState> _bloc;
   bool _opennedDialog = false;
+  bool _sentInitEvent = false;
+  String emailErrorMessage;
+  String passwordErrorMessage;
 
   @override
   void initState() {
@@ -26,6 +30,7 @@ class _LoginState extends State<Login> {
     _passwordController = TextEditingController();
     _emailFocusNode = FocusNode();
     _passwordFocusNode = FocusNode();
+
     super.initState();
   }
 
@@ -82,9 +87,10 @@ class _LoginState extends State<Login> {
                           T Function<T>(ProviderBase<Object, T>) watch,
                           Widget child) {
                         _bloc = watch(AuthProvider.authBloc);
-                        print(_bloc);
+                        _initEvent(_bloc);
+
                         return StreamBuilder<AuthState>(
-                            stream: _bloc.event$,
+                            stream: _bloc.state$,
                             builder: (context, snapshot) {
                               bool obscure =
                                   snapshot?.data?.obscurePassword ?? true;
@@ -101,13 +107,45 @@ class _LoginState extends State<Login> {
                                 });
                               }
 
+                              if (snapshot.hasError &&
+                                  snapshot.error is AuthStateError) {
+                                AuthStateError error = snapshot.error;
+                                emailErrorMessage = error.emailError;
+                                passwordErrorMessage = error.passwordError;
+                                if (error.errorMessage != null) {
+                                  Scaffold.of(context).showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: Colors.red,
+                                      content: Text(
+                                        error.errorMessage,
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  );
+                                }
+                              } else {
+                                _cleanErrors();
+                              }
+
                               return Column(children: [
                                 TextField(
                                   focusNode: _emailFocusNode,
                                   controller: _emailController,
                                   decoration: InputDecoration(
                                     labelText: _emailLabelText,
+                                    errorText: emailErrorMessage,
                                   ),
+                                  keyboardType: TextInputType.emailAddress,
+                                  textInputAction: TextInputAction.next,
+                                  onSubmitted: (value) {
+                                    FocusScope.of(context)
+                                        .requestFocus(_passwordFocusNode);
+                                  },
+                                  onChanged: (value) {
+                                    if (emailErrorMessage != null) {
+                                      _bloc.inEvent.add(AuthEventCleanError());
+                                    }
+                                  },
                                 ),
                                 SizedBox(
                                   height: 16,
@@ -116,8 +154,17 @@ class _LoginState extends State<Login> {
                                   focusNode: _passwordFocusNode,
                                   controller: _passwordController,
                                   obscureText: obscure,
+                                  keyboardType: TextInputType.text,
+                                  textInputAction: TextInputAction.send,
+                                  onSubmitted: (_) => _submitLogin(),
+                                  onChanged: (_) {
+                                    if (passwordErrorMessage != null) {
+                                      _bloc.inEvent.add(AuthEventCleanError());
+                                    }
+                                  },
                                   decoration: InputDecoration(
                                     labelText: _passwordLabelText,
+                                    errorText: passwordErrorMessage,
                                     suffixIcon: IconButton(
                                       icon: Icon(
                                         Icons.visibility_outlined,
@@ -155,7 +202,7 @@ class _LoginState extends State<Login> {
                   watch(AuthProvider.authBloc);
 
               return StreamBuilder<bool>(
-                  stream: bloc.event$
+                  stream: bloc.state$
                       .map((event) => event != null && event.loading),
                   initialData: false,
                   builder: (context, snapshot) {
@@ -191,7 +238,18 @@ class _LoginState extends State<Login> {
   }
 
   _navigate() {
-    //TODO Navigate to feed
-    print('NAVIGATE!');
+    Navigator.of(context).pushReplacementNamed(AppRoutes.feed);
+  }
+
+  void _initEvent(BaseBloc bloc) {
+    if (!_sentInitEvent) {
+      _sentInitEvent = true;
+      bloc.inEvent.add(AuthEventInit(_navigate));
+    }
+  }
+
+  void _cleanErrors() {
+    emailErrorMessage = null;
+    passwordErrorMessage = null;
   }
 }

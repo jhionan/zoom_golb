@@ -39,4 +39,9 @@ class FirebaseApiAuth implements AuthApi {
         _firebaseAuth.authStateChanges(),
         (a, b) => b);
   }
+
+  @override
+  Stream<fire.User> currentUser() async* {
+    yield _firebaseAuth.currentUser;
+  }
 }

@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:rxdart/subjects.dart';
 
 abstract class BaseBloc<IN extends BaseEvent, STATE extends BaseState> {
-  Stream<STATE> get event$;
+  Stream<STATE> get state$;
   StreamSink<IN> get inEvent;
   dispose();
 }
@@ -13,7 +13,7 @@ abstract class Bloc<IN extends BaseEvent, STATE extends BaseState>
     implements BaseBloc<IN, STATE> {
   Bloc() {
     _eventSubscription = inEventStream$.listen(onData, onError: onError);
-    _stateSubscription = event$.listen((event) {
+    _stateSubscription = state$.listen((event) {
       lastState = event;
     }, onError: onError);
   }
@@ -22,13 +22,13 @@ abstract class Bloc<IN extends BaseEvent, STATE extends BaseState>
   StreamSubscription<IN> _eventSubscription;
 
   @override
-  Stream<STATE> get event$ => eventController.stream;
+  Stream<STATE> get state$ => stateController.stream;
   @override
   StreamSink<IN> get inEvent => inEventController.sink;
   Stream get inEventStream$ => inEventController.stream;
 
   StreamController<IN> inEventController = StreamController();
-  BehaviorSubject<STATE> eventController = BehaviorSubject();
+  BehaviorSubject<STATE> stateController = BehaviorSubject();
 
   @override
   @mustCallSuper
@@ -36,7 +36,7 @@ abstract class Bloc<IN extends BaseEvent, STATE extends BaseState>
     _eventSubscription?.cancel();
     _stateSubscription.cancel();
     inEventController.close();
-    eventController.close();
+    stateController.close();
   }
 
   onData(IN event);
